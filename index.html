@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PROfit: бесплатный калькулятор КБЖУ и замены продуктов</title>
+  <meta name="description" content="Посчитай норму калорий и БЖУ за минуту и узнай, чем заменить вредные продукты, в том числе недорого. Бесплатно и без регистрации.">
+  <meta property="og:title" content="PROfit: бесплатный калькулятор КБЖУ и замены продуктов">
+  <meta property="og:description" content="Посчитай норму калорий и БЖУ за минуту и узнай, чем заменить вредные продукты, в том числе недорого. Бесплатно и без регистрации.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/redesign.css">
+</head>
+<body>
+<a class="skip" href="#main">К содержимому</a>
+<header class="header">
+  <div class="wrap">
+    <a class="logo" href="index.html"><img src="img/logo.svg" alt=""><span>PRO<b>fit</b></span></a>
+    <nav class="nav" id="nav" aria-label="Меню">
+      <ul>
+        <li><a href="index.html" class="active" aria-current="page">Главная</a></li>
+        <li><a href="calculator.html">Калькулятор</a></li>
+        <li><a href="swaps.html">Замены</a></li>
+        <li><a href="tips.html">Советы</a></li>
+        <li><a href="products.html">Продукты</a></li>
+        <li><a href="about.html">О команде</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn-head" href="calculator.html">Посчитать КБЖУ</a>
+    <button class="burger" type="button" aria-label="Открыть меню" aria-controls="nav" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<main id="main">
+<section class="hero section">
+  <div class="wrap">
+    <div class="hero-text">
+      <span class="label-mono">учебный проект ОПД ГУАП · гр. 4528</span>
+      <h1>Питаться нормально можно и <span class="hl">без больших денег</span></h1>
+      <p>Посчитай свою норму КБЖУ за минуту, посмотри, чем заменить чипсы и колбасу, и прочитай пару коротких советов. Бесплатно и без регистрации.</p>
+      <p><a class="btn" href="calculator.html">Посчитать КБЖУ</a> &nbsp; <a class="link-arrow" href="swaps.html">или сразу к заменам →</a></p>
+    </div>
+    <div class="hero-art">
+      <img class="doodle" src="img/chips.svg" alt="" style="left:-4px;top:-10px;transform:rotate(-12deg)">
+      <img class="doodle" src="img/popcorn.svg" alt="" style="right:0;bottom:0;transform:rotate(10deg)">
+      <div class="receipt" id="receipt">
+        <span class="tape"></span>
+        <h3>ЧЕК ЗАМЕНЫ</h3>
+        <div class="rc-sub">PROfit · данные на 100 г</div>
+        <div class="rc-row"><span>БЫЛО</span><span class="dots"></span><span id="rc-from-k"></span></div>
+        <div class="rc-name was" id="rc-from"></div>
+        <div class="rc-row"><span>СТАЛО</span><span class="dots"></span><span id="rc-to-k"></span></div>
+        <div class="rc-name" id="rc-to"></div>
+        <div class="rc-line"></div>
+        <div class="rc-row rc-total"><span>РАЗНИЦА</span><span class="dots"></span><span id="rc-diff"></span></div>
+        <div class="rc-row"><span>БЮДЖЕТНО</span><span class="dots"></span><span id="rc-bud"></span></div>
+        <div class="rc-why" id="rc-why"></div>
+        <div class="barcode"></div>
+        <button class="rc-next" id="rc-next" type="button">другая замена (<span id="rc-num"></span>)</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <h2>Оглавление</h2>
+    <ol class="toc grid-paper">
+      <li><span class="n">01</span><a href="calculator.html">Калькулятор КБЖУ</a><p>Пол, возраст, рост, вес, активность и цель. Получаешь калории и граммы белков, жиров и углеводов.</p></li>
+      <li><span class="n">02</span><a href="swaps.html">Таблица замен</a><p>Чем заменить вредное, причём часть замен не дороже обычных продуктов. Бюджетные отмечены.</p></li>
+      <li><span class="n">03</span><a href="tips.html">Короткие советы</a><p>Без длинных статей. Один совет можно прочитать, пока греется чайник.</p></li>
+      <li><span class="n">04</span><a href="products.html">КБЖУ продуктов</a><p>93 обычных продукта на 100 г с поиском.</p></li>
+      <li><span class="n">05</span><a href="about.html">О команде</a><p>Кто сделал сайт и как с нами связаться.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="strip">
+  <div class="wrap">
+    <div class="stickers"><span>без регистрации</span><span>без оплаты</span><span>без рекламы курсов</span></div>
+    <a class="btn" href="calculator.html">Начать с калькулятора</a>
+  </div>
+</section>
+</main>
+<footer class="footer">
+  <div class="wrap">
+    <ul>
+      <li><a href="calculator.html">Калькулятор КБЖУ</a></li>
+      <li><a href="swaps.html">Таблица замен</a></li>
+      <li><a href="tips.html">Советы</a></li>
+      <li><a href="products.html">КБЖУ продуктов</a></li>
+      <li><a href="about.html">О команде</a></li>
+    </ul>
+    <p>PROfit, учебный проект ОПД ГУАП, 2026. Информация на сайте не заменяет консультацию врача.</p>
+    <p>КБЖУ продуктов взяты из открытой базы USDA FoodData Central (SR Legacy). Введённые в калькулятор данные никуда не отправляются.</p>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/data.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "profit-site-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Автотесты сайта PROfit",
+  "scripts": {
+    "test": "node site_test.js"
+  },
+  "dependencies": {
+    "playwright-core": "^1.49.0"
+  }
+}

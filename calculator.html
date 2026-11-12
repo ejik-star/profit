@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Калькулятор КБЖУ онлайн бесплатно | PROfit</title>
+  <meta name="description" content="Норма калорий, белков, жиров и углеводов по формуле Миффлина-Сан Жеора. Шесть полей, результат сразу, без регистрации.">
+  <meta property="og:title" content="Калькулятор КБЖУ онлайн бесплатно | PROfit">
+  <meta property="og:description" content="Норма калорий, белков, жиров и углеводов по формуле Миффлина-Сан Жеора. Шесть полей, результат сразу, без регистрации.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/redesign.css">
+</head>
+<body>
+<a class="skip" href="#main">К содержимому</a>
+<header class="header">
+  <div class="wrap">
+    <a class="logo" href="index.html"><img src="img/logo.svg" alt=""><span>PRO<b>fit</b></span></a>
+    <nav class="nav" id="nav" aria-label="Меню">
+      <ul>
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="calculator.html" class="active" aria-current="page">Калькулятор</a></li>
+        <li><a href="swaps.html">Замены</a></li>
+        <li><a href="tips.html">Советы</a></li>
+        <li><a href="products.html">Продукты</a></li>
+        <li><a href="about.html">О команде</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn-head" href="calculator.html">Посчитать КБЖУ</a>
+    <button class="burger" type="button" aria-label="Открыть меню" aria-controls="nav" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<main id="main">
+<section class="page-head">
+  <div class="wrap">
+    <h1>Калькулятор КБЖУ</h1>
+    <p class="lead">Заполни шесть полей и узнай примерную норму калорий, белков, жиров и углеводов на день.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="calc">
+      <div class="result-empty" aria-hidden="true"><b>Здесь появится твой чек</b><span>Заполни поля слева и нажми «Посчитать».</span></div>
+      <form id="calc-form" novalidate>
+        <div class="field wide">
+          <span class="label" id="sex-label">Пол</span>
+          <div class="sex" role="radiogroup" aria-labelledby="sex-label">
+            <label><input type="radio" name="sex" value="f" checked><span>Женский</span></label>
+            <label><input type="radio" name="sex" value="m"><span>Мужской</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="age">Возраст, лет</label>
+          <input id="age" type="text" inputmode="numeric" autocomplete="off" placeholder="например, 19" aria-describedby="age-err">
+          <span class="hint">от 16 до 80</span>
+          <span class="err" id="age-err" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="height">Рост, см</label>
+          <input id="height" type="text" inputmode="decimal" autocomplete="off" placeholder="например, 170" aria-describedby="height-err">
+          <span class="hint">от 120 до 230</span>
+          <span class="err" id="height-err" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="weight">Вес, кг</label>
+          <input id="weight" type="text" inputmode="decimal" autocomplete="off" placeholder="например, 62,5" aria-describedby="weight-err">
+          <span class="hint">от 35 до 250, можно с запятой</span>
+          <span class="err" id="weight-err" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="activity">Активность</label>
+          <select id="activity">
+            <option value="1.2">Минимальная, без спорта</option>
+            <option value="1.375" selected>Лёгкая, 1-3 раза в неделю</option>
+            <option value="1.55">Средняя, 3-5 раз в неделю</option>
+            <option value="1.725">Высокая, 6-7 раз в неделю</option>
+            <option value="1.9">Очень высокая, каждый день</option>
+          </select>
+        </div>
+        <div class="field wide">
+          <label for="goal">Цель</label>
+          <select id="goal">
+            <option value="lose">Снизить вес</option>
+            <option value="keep" selected>Держать вес</option>
+            <option value="gain">Набрать массу</option>
+          </select>
+        </div>
+        <div class="wide">
+          <button class="btn" type="submit">Посчитать</button>
+        </div>
+      </form>
+      <div class="form-err" id="form-err" role="alert"></div>
+
+      <div class="result" id="result" aria-live="polite">
+        <div>Твоя примерная норма в день:</div>
+        <div class="kcal"><span id="r-kcal">0</span> <small>ккал</small></div>
+        <div class="macros">
+          <div class="macro"><b id="r-p">0</b><span>белки, г</span></div>
+          <div class="macro"><b id="r-f">0</b><span>жиры, г</span></div>
+          <div class="macro"><b id="r-c">0</b><span>углеводы, г</span></div>
+        </div>
+        <div class="donut-wrap"><svg id="donut" viewBox="0 0 42 42" aria-label="Доли белков, жиров и углеводов"></svg><div class="legend" id="legend"></div></div>
+        <p class="note" id="r-bmr"></p>
+        <p class="note">Это ориентир по формуле Миффлина-Сан Жеора, а не назначение врача. Если есть болезни, беременность или нужен точный план, лучше сходить к специалисту.</p>
+        <div class="result-links">
+          <a class="btn btn-second" href="swaps.html">Чем заменить вредное</a>
+          <a class="btn btn-second" href="tips.html">Короткие советы</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="wrap how">
+    <h2>Как мы считаем</h2>
+    <p>Сначала считаем обмен в покое по формуле Миффлина-Сан Жеора. Потом умножаем на коэффициент активности. Если цель снизить вес, отнимаем 15%, если набрать, добавляем 10%. Белки, жиры и углеводы делим в процентах от калорий, для каждой цели доли свои.</p>
+    <ul>
+      <li>для мужчин: 10 × вес + 6,25 × рост − 5 × возраст + 5;</li>
+      <li>для женщин: 10 × вес + 6,25 × рост − 5 × возраст − 161;</li>
+      <li>коэффициенты активности: 1,2; 1,375; 1,55; 1,725; 1,9;</li>
+      <li>доли белков, жиров и углеводов: снизить вес 30/30/40%, держать 25/30/45%, набрать 25/25/50%.</li>
+    </ul>
+    <p>Калькулятор рассчитан на возраст от 16 лет: для детей и младших подростков формула для взрослых не подходит. Все расчёты идут прямо в браузере, введённые данные никуда не отправляются и не сохраняются.</p>
+  </div>
+</section>
+</main>
+<footer class="footer">
+  <div class="wrap">
+    <ul>
+      <li><a href="calculator.html">Калькулятор КБЖУ</a></li>
+      <li><a href="swaps.html">Таблица замен</a></li>
+      <li><a href="tips.html">Советы</a></li>
+      <li><a href="products.html">КБЖУ продуктов</a></li>
+      <li><a href="about.html">О команде</a></li>
+    </ul>
+    <p>PROfit, учебный проект ОПД ГУАП, 2026. Информация на сайте не заменяет консультацию врача.</p>
+    <p>КБЖУ продуктов взяты из открытой базы USDA FoodData Central (SR Legacy). Введённые в калькулятор данные никуда не отправляются.</p>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/calc.js"></script>
+</body>
+</html>

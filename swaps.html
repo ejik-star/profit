@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Чем заменить вредные продукты: таблица замен | PROfit</title>
+  <meta name="description" content="Чипсы, колбаса, газировка и другие продукты и чем их заменить. КБЖУ на 100 г, бюджетные замены отмечены.">
+  <meta property="og:title" content="Чем заменить вредные продукты: таблица замен | PROfit">
+  <meta property="og:description" content="Чипсы, колбаса, газировка и другие продукты и чем их заменить. КБЖУ на 100 г, бюджетные замены отмечены.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/redesign.css">
+</head>
+<body>
+<a class="skip" href="#main">К содержимому</a>
+<header class="header">
+  <div class="wrap">
+    <a class="logo" href="index.html"><img src="img/logo.svg" alt=""><span>PRO<b>fit</b></span></a>
+    <nav class="nav" id="nav" aria-label="Меню">
+      <ul>
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="calculator.html">Калькулятор</a></li>
+        <li><a href="swaps.html" class="active" aria-current="page">Замены</a></li>
+        <li><a href="tips.html">Советы</a></li>
+        <li><a href="products.html">Продукты</a></li>
+        <li><a href="about.html">О команде</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn-head" href="calculator.html">Посчитать КБЖУ</a>
+    <button class="burger" type="button" aria-label="Открыть меню" aria-controls="nav" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<main id="main">
+<section class="page-head">
+  <div class="wrap">
+    <h1>Чем заменить вредное</h1>
+    <p class="lead">Это не список запретов. Просто варианты, которые по составу лучше, а часто ещё и дешевле. Значком <span class="rub">₽</span> отмечены замены, которые обычно стоят не больше исходного продукта.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="tools">
+      <input class="search" id="swap-search" type="search" placeholder="Найти продукт, например «чипсы»" aria-label="Поиск по заменам">
+      <label class="check"><input type="checkbox" id="only-budget"> только бюджетные</label>
+      <span class="count" id="swap-count"></span>
+    </div>
+    <div class="table-box">
+      <table class="table cardlike">
+        <thead><tr><th>Вместо</th><th>Попробуй</th><th>Почему</th><th>Бюджетно</th></tr></thead>
+        <tbody id="swaps-body"></tbody>
+      </table>
+    </div>
+    <p class="empty" id="swap-empty">Ничего не нашли. Попробуй другое слово или сними галочку «только бюджетные».</p>
+    <p class="small">КБЖУ указаны на 100 г продукта по таблицам USDA FoodData Central. У продуктов в магазине цифры могут немного отличаться, смотри упаковку. Полный список продуктов есть на странице <a href="products.html">КБЖУ продуктов</a>.</p>
+    <p><a class="btn" href="calculator.html">Посчитать свою норму КБЖУ</a></p>
+  </div>
+</section>
+</main>
+<footer class="footer">
+  <div class="wrap">
+    <ul>
+      <li><a href="calculator.html">Калькулятор КБЖУ</a></li>
+      <li><a href="swaps.html">Таблица замен</a></li>
+      <li><a href="tips.html">Советы</a></li>
+      <li><a href="products.html">КБЖУ продуктов</a></li>
+      <li><a href="about.html">О команде</a></li>
+    </ul>
+    <p>PROfit, учебный проект ОПД ГУАП, 2026. Информация на сайте не заменяет консультацию врача.</p>
+    <p>КБЖУ продуктов взяты из открытой базы USDA FoodData Central (SR Legacy). Введённые в калькулятор данные никуда не отправляются.</p>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/data.js"></script>
+<script src="js/swaps.js"></script>
+</body>
+</html>
