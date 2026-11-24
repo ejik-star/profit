@@ -5,19 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Чем заменить вредные продукты: таблица замен | PROfit</title>
   <meta name="description" content="Чипсы, колбаса, газировка и другие продукты и чем их заменить. КБЖУ на 100 г, бюджетные замены отмечены.">
+  <meta name="theme-color" content="#f7f2e6">
+  <link rel="canonical" href="https://ejik-star.github.io/profit/swaps.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="PROfit">
   <meta property="og:title" content="Чем заменить вредные продукты: таблица замен | PROfit">
   <meta property="og:description" content="Чипсы, колбаса, газировка и другие продукты и чем их заменить. КБЖУ на 100 г, бюджетные замены отмечены.">
+  <meta property="og:url" content="https://ejik-star.github.io/profit/swaps.html">
+  <meta property="og:image" content="https://ejik-star.github.io/profit/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="32x32">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/redesign.css">
+  <script>try{var t=localStorage.getItem('profit-theme');if(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)t='dark';if(t==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
+  <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
 <a class="skip" href="#main">К содержимому</a>
 <header class="header">
   <div class="wrap">
-    <a class="logo" href="index.html"><img src="img/logo.svg" alt=""><span>PRO<b>fit</b></span></a>
+    <a class="logo" href="index.html" aria-label="PROfit, на главную"><img src="img/logo.svg" alt="" width="34" height="34"><span>PRO<b>fit</b></span></a>
     <nav class="nav" id="nav" aria-label="Меню">
       <ul>
         <li><a href="index.html">Главная</a></li>
@@ -26,6 +36,7 @@
         <li><a href="tips.html">Советы</a></li>
         <li><a href="products.html">Продукты</a></li>
         <li><a href="about.html">О команде</a></li>
+        <li><button class="theme-btn" type="button" aria-pressed="false" title="Переключить тему"><span class="t-dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg></span><span class="t-light"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span><span class="theme-label">Ночь</span></button></li>
       </ul>
     </nav>
     <a class="btn btn-head" href="calculator.html">Посчитать КБЖУ</a>
@@ -35,6 +46,7 @@
 <main id="main">
 <section class="page-head">
   <div class="wrap">
+    <img class="doodle" src="img/chips.svg" alt="" aria-hidden="true">
     <h1>Чем заменить вредное</h1>
     <p class="lead">Это не список запретов. Просто варианты, которые по составу лучше, а часто ещё и дешевле. Значком <span class="rub">₽</span> отмечены замены, которые обычно стоят не больше исходного продукта.</p>
   </div>
@@ -43,17 +55,24 @@
 <section class="section">
   <div class="wrap">
     <div class="tools">
-      <input class="search" id="swap-search" type="search" placeholder="Найти продукт, например «чипсы»" aria-label="Поиск по заменам">
+      <div class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg><input class="search" id="swap-search" type="search" placeholder="Найти продукт, например «чипсы»" aria-label="Поиск по заменам" autocomplete="off"></div>
       <label class="check"><input type="checkbox" id="only-budget"> только бюджетные</label>
-      <span class="count" id="swap-count"></span>
+      <select id="swap-sort" aria-label="Порядок замен">
+        <option value="">Как в таблице</option>
+        <option value="save">Больше всего минус ккал</option>
+        <option value="az">По алфавиту</option>
+      </select>
+      <span class="count" id="swap-count" aria-live="polite"></span>
     </div>
+    <div class="chips" id="swap-cats" role="radiogroup" aria-label="Группа продуктов"></div>
     <div class="table-box">
       <table class="table cardlike">
-        <thead><tr><th>Вместо</th><th>Попробуй</th><th>Почему</th><th>Бюджетно</th></tr></thead>
+        <caption class="vh">Таблица замен: что было, чем заменить, почему, разница в калориях и цена</caption>
+        <thead><tr><th scope="col">Вместо</th><th scope="col">Попробуй</th><th scope="col">Почему</th><th scope="col">Разница</th><th scope="col">Бюджетно</th></tr></thead>
         <tbody id="swaps-body"></tbody>
       </table>
     </div>
-    <p class="empty" id="swap-empty">Ничего не нашли. Попробуй другое слово или сними галочку «только бюджетные».</p>
+    <p class="empty" id="swap-empty">Ничего не нашли. Попробуй другое слово или <button type="button" class="linkbtn" id="swap-reset">сбрось фильтры</button>.</p>
     <p class="small">КБЖУ указаны на 100 г продукта по таблицам USDA FoodData Central. У продуктов в магазине цифры могут немного отличаться, смотри упаковку. Полный список продуктов есть на странице <a href="products.html">КБЖУ продуктов</a>.</p>
     <p><a class="btn" href="calculator.html">Посчитать свою норму КБЖУ</a></p>
   </div>
@@ -61,6 +80,7 @@
 </main>
 <footer class="footer">
   <div class="wrap">
+    <a class="up" href="#main">наверх ↑</a>
     <ul>
       <li><a href="calculator.html">Калькулятор КБЖУ</a></li>
       <li><a href="swaps.html">Таблица замен</a></li>
@@ -69,9 +89,10 @@
       <li><a href="about.html">О команде</a></li>
     </ul>
     <p>PROfit, учебный проект ОПД ГУАП, 2026. Информация на сайте не заменяет консультацию врача.</p>
-    <p>КБЖУ продуктов взяты из открытой базы USDA FoodData Central (SR Legacy). Введённые в калькулятор данные никуда не отправляются.</p>
+    <p>КБЖУ продуктов взяты из открытой базы USDA FoodData Central (SR Legacy). Введённые данные никуда не отправляются, они остаются только в твоём браузере.</p>
   </div>
 </footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="js/main.js"></script>
 <script src="js/data.js"></script>
 <script src="js/swaps.js"></script>

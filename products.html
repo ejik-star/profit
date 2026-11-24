@@ -3,21 +3,31 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>КБЖУ продуктов: таблица на 100 г | PROfit</title>
-  <meta name="description" content="Калорийность, белки, жиры и углеводы 93 обычных продуктов на 100 г по данным USDA FoodData Central. Поиск по названию и группе.">
-  <meta property="og:title" content="КБЖУ продуктов: таблица на 100 г | PROfit">
-  <meta property="og:description" content="Калорийность, белки, жиры и углеводы 93 обычных продуктов на 100 г по данным USDA FoodData Central. Поиск по названию и группе.">
+  <title>КБЖУ продуктов на 100 г и тарелка дня | PROfit</title>
+  <meta name="description" content="Калорийность, белки, жиры и углеводы 93 обычных продуктов по базе USDA. Поиск, сортировка и подсчёт КБЖУ за день.">
+  <meta name="theme-color" content="#f7f2e6">
+  <link rel="canonical" href="https://ejik-star.github.io/profit/products.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="PROfit">
+  <meta property="og:title" content="КБЖУ продуктов на 100 г и тарелка дня | PROfit">
+  <meta property="og:description" content="Калорийность, белки, жиры и углеводы 93 обычных продуктов по базе USDA. Поиск, сортировка и подсчёт КБЖУ за день.">
+  <meta property="og:url" content="https://ejik-star.github.io/profit/products.html">
+  <meta property="og:image" content="https://ejik-star.github.io/profit/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="32x32">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/redesign.css">
+  <script>try{var t=localStorage.getItem('profit-theme');if(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)t='dark';if(t==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
+  <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
 <a class="skip" href="#main">К содержимому</a>
 <header class="header">
   <div class="wrap">
-    <a class="logo" href="index.html"><img src="img/logo.svg" alt=""><span>PRO<b>fit</b></span></a>
+    <a class="logo" href="index.html" aria-label="PROfit, на главную"><img src="img/logo.svg" alt="" width="34" height="34"><span>PRO<b>fit</b></span></a>
     <nav class="nav" id="nav" aria-label="Меню">
       <ul>
         <li><a href="index.html">Главная</a></li>
@@ -26,6 +36,7 @@
         <li><a href="tips.html">Советы</a></li>
         <li><a href="products.html" class="active" aria-current="page">Продукты</a></li>
         <li><a href="about.html">О команде</a></li>
+        <li><button class="theme-btn" type="button" aria-pressed="false" title="Переключить тему"><span class="t-dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg></span><span class="t-light"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span><span class="theme-label">Ночь</span></button></li>
       </ul>
     </nav>
     <a class="btn btn-head" href="calculator.html">Посчитать КБЖУ</a>
@@ -35,31 +46,69 @@
 <main id="main">
 <section class="page-head">
   <div class="wrap">
+    <img class="doodle" src="img/apple.svg" alt="" aria-hidden="true">
     <h1>КБЖУ продуктов</h1>
-    <p class="lead">Калории, белки, жиры и углеводы на 100 г. Здесь продукты, которые чаще всего покупают студенты, и те, что встречаются в таблице замен.</p>
+    <p class="lead">Калории, белки, жиры и углеводы на 100 г. Здесь продукты, которые чаще всего покупают студенты, и те, что встречаются в таблице замен. Нажми «+», чтобы положить продукт в тарелку дня и посчитать свой рацион.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="wrap">
     <div class="tools">
-      <input class="search" id="prod-search" type="search" placeholder="Найти продукт, например «гречка»" aria-label="Поиск по продуктам">
-      <select id="prod-group" aria-label="Группа продуктов"><option value="">Все группы</option></select>
-      <span class="count" id="prod-count"></span>
+      <div class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg><input class="search" id="prod-search" type="search" placeholder="Найти продукт, например «гречка»" aria-label="Поиск по продуктам" autocomplete="off"></div>
+      <span class="count" id="prod-count" aria-live="polite"></span>
     </div>
-    <div class="table-box">
-      <table class="table products">
-        <thead><tr><th>Продукт</th><th class="num">Ккал</th><th class="num">Б, г</th><th class="num">Ж, г</th><th class="num">У, г</th></tr></thead>
-        <tbody id="prod-body"></tbody>
-      </table>
+    <div class="chips" id="prod-groups" role="radiogroup" aria-label="Группа продуктов"></div>
+    <div class="prod-layout">
+      <div>
+        <div class="table-box">
+          <table class="table products">
+            <caption class="vh">КБЖУ продуктов на 100 г. Нажми на заголовок столбца, чтобы отсортировать.</caption>
+            <thead><tr>
+              <th scope="col" class="sortable" data-key="name" aria-sort="none"><button type="button">Продукт</button></th>
+              <th scope="col" class="num sortable" data-key="kcal" aria-sort="none"><button type="button">Ккал</button></th>
+              <th scope="col" class="num sortable" data-key="p" aria-sort="none"><button type="button">Б, г</button></th>
+              <th scope="col" class="num sortable" data-key="f" aria-sort="none"><button type="button">Ж, г</button></th>
+              <th scope="col" class="num sortable" data-key="c" aria-sort="none"><button type="button">У, г</button></th>
+              <th scope="col"><span class="vh">В тарелку</span></th>
+            </tr></thead>
+            <tbody id="prod-body"></tbody>
+          </table>
+        </div>
+        <p class="empty" id="prod-empty">Такого продукта в таблице пока нет. <button type="button" class="linkbtn" id="prod-reset">Сбросить поиск</button></p>
+        <p class="small">Источник: USDA FoodData Central, набор SR Legacy (апрель 2018 года), Министерство сельского хозяйства США, <a href="https://fdc.nal.usda.gov/" rel="noopener" target="_blank">fdc.nal.usda.gov</a>. Цифры взяты по номерам продуктов (FDC ID), номер видно при наведении на название и в таблице XLSX проекта. Крупы и бобовые указаны в сухом виде.</p>
+      </div>
+      <aside class="receipt plate" id="plate" aria-labelledby="plate-title">
+        <span class="tape" aria-hidden="true"></span>
+        <h2 class="rc-title" id="plate-title">ТАРЕЛКА ДНЯ</h2>
+        <div class="rc-sub">сколько граммов съешь, столько и впиши</div>
+        <p class="plate-empty" id="plate-empty">Пока пусто. Нажми «+» рядом с продуктом.</p>
+        <ul id="plate-list"></ul>
+        <div class="rc-line"></div>
+        <div class="tot">
+          <div class="rc-row rc-total"><span>ККАЛ</span><span class="dots"></span><span id="pl-kcal">0</span></div>
+          <div class="rc-row"><span>белки</span><span class="dots"></span><span id="pl-p">0 г</span></div>
+          <div class="rc-row"><span>жиры</span><span class="dots"></span><span id="pl-f">0 г</span></div>
+          <div class="rc-row"><span>углеводы</span><span class="dots"></span><span id="pl-c">0 г</span></div>
+        </div>
+        <div id="plate-norm-box">
+          <div class="bar" id="pl-bar"><i style="width:0"></i></div>
+          <div class="plate-norm" id="pl-norm">Посчитай норму в <a href="calculator.html">калькуляторе</a>, и здесь будет видно, сколько от неё набралось.</div>
+        </div>
+        <div class="plate-tools">
+          <button type="button" id="pl-copy">Скопировать</button>
+          <button type="button" id="pl-print">Распечатать</button>
+          <button type="button" id="pl-clear">Очистить</button>
+        </div>
+      </aside>
     </div>
-    <p class="empty" id="prod-empty">Такого продукта в таблице пока нет.</p>
-    <p class="small">Источник: USDA FoodData Central, набор SR Legacy (апрель 2018 года), Министерство сельского хозяйства США, <a href="https://fdc.nal.usda.gov/" rel="noopener" target="_blank">fdc.nal.usda.gov</a>. Цифры взяты по номерам продуктов (FDC ID), номера есть в таблице XLSX проекта. Крупы и бобовые указаны в сухом виде.</p>
   </div>
 </section>
+<a class="btn btn-second plate-fab" id="plate-fab" href="#plate">Тарелка: <span id="fab-kcal">0</span> ккал</a>
 </main>
 <footer class="footer">
   <div class="wrap">
+    <a class="up" href="#main">наверх ↑</a>
     <ul>
       <li><a href="calculator.html">Калькулятор КБЖУ</a></li>
       <li><a href="swaps.html">Таблица замен</a></li>
@@ -68,9 +117,10 @@
       <li><a href="about.html">О команде</a></li>
     </ul>
     <p>PROfit, учебный проект ОПД ГУАП, 2026. Информация на сайте не заменяет консультацию врача.</p>
-    <p>КБЖУ продуктов взяты из открытой базы USDA FoodData Central (SR Legacy). Введённые в калькулятор данные никуда не отправляются.</p>
+    <p>КБЖУ продуктов взяты из открытой базы USDA FoodData Central (SR Legacy). Введённые данные никуда не отправляются, они остаются только в твоём браузере.</p>
   </div>
 </footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="js/main.js"></script>
 <script src="js/data.js"></script>
 <script src="js/products.js"></script>

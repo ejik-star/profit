@@ -1,4 +1,4 @@
-// Автотесты сайта PROfit по тест-кейсам этапа 5 (ТК-01...ТК-15) и проверка вёрстки.
+// Автотесты сайта PROfit: тест-кейсы этапа 5 (ТК-01...ТК-15), новые функции версии 2 и проверка вёрстки.
 // Запуск: npm install, потом node site_test.js
 // Нужен установленный Google Chrome или Chromium (путь можно задать в CHROME_PATH).
 const { chromium } = require('playwright-core');
@@ -32,9 +32,10 @@ async function fill(page, d) {
   await page.fill('#height', d.height);
   await page.fill('#weight', d.weight);
   await page.selectOption('#activity', d.activity);
-  await page.selectOption('#goal', d.goal);
+  await page.click('.goal label:has(input[value="' + d.goal + '"])');
   await page.click('#calc-form button[type=submit]');
 }
+async function goal(page, g) { await page.click('.goal label:has(input[value="' + g + '"])'); }
 async function readResult(page) {
   return page.evaluate(() => ['r-kcal', 'r-p', 'r-f', 'r-c'].map((id) => +document.getElementById(id).textContent));
 }
@@ -46,6 +47,8 @@ async function readResult(page) {
   const consoleErrors = [];
   page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(page.url() + ': ' + m.text()); });
   page.on('pageerror', (e) => consoleErrors.push(page.url() + ': ' + e.message));
+  const outside = [];
+  ctx.on('request', (r) => { if (!/^(file:|data:)/.test(r.url())) outside.push(r.url()); });
 
   // ТК-01
   await page.goto(url('index.html'));
@@ -64,7 +67,7 @@ async function readResult(page) {
   check('ТК-03', 'Расчёт нормы', r.join() === '1863,116,62,210', r.join('/'));
 
   // ТК-04
-  await page.selectOption('#goal', 'lose');
+  await goal(page, 'lose');
   await page.click('#calc-form button[type=submit]');
   r = await readResult(page);
   check('ТК-04', 'Расчёт для другой цели', r[0] === 1584, r.join('/'));
@@ -203,9 +206,161 @@ async function readResult(page) {
   await page.fill('#prod-search', 'гречка');
   const pG = await page.$$eval('#prod-body tr', (t) => t.length);
   await page.fill('#prod-search', '');
-  await page.selectOption('#prod-group', 'Рыба');
+  await page.click('#prod-groups label:has-text("Рыба")');
   const pR = await page.$$eval('#prod-body tr', (t) => t.length);
   check('доп', 'Таблица продуктов: 93, поиск и группа', pAll === 93 && pG >= 1 && pR === 6, pAll + ', гречка ' + pG + ', рыба ' + pR);
+
+
+  // ---------- версия 2: новые функции ----------
+  // калькулятор: разбивка, ИМТ, автопересчёт, запоминание
+  await page.goto(url('calculator.html'));
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  check('v2', 'без сохранённых данных результат скрыт, поля пустые', !(await page.isVisible('#result')) && (await page.inputValue('#age')) === '');
+  await fill(page, { sex: 'f', age: '19', height: '165', weight: '58', activity: '1.375', goal: 'keep' });
+  const bd = await page.evaluate(() => ['r-bmr', 'r-tdee', 'r-adj', 'r-total', 'r-bmi', 'r-bmi-cat', 'r-pkg'].map((id) => document.getElementById(id).textContent));
+  check('v2', 'разбивка расчёта: обмен в покое, активность, цель, итог', bd[0] === '1355 ккал' && bd[1] === '1863 ккал' && bd[2] === '0' && bd[3] === '1863 ккал', bd.slice(0, 4).join(' / '));
+  check('v2', 'ИМТ 58 кг / 165 см = 21,3, в норме', bd[4] === '21,3' && bd[5].includes('в норме'), bd[4] + ' ' + bd[5]);
+  check('v2', 'белок в граммах на кг веса', bd[6] === '2,0 г/кг', bd[6]);
+  await goal(page, 'gain');
+  r = await readResult(page);
+  const mg = manual('f', 19, 165, 58, 1.375, 'gain');
+  const adj = await page.textContent('#r-adj');
+  check('v2', 'смена цели пересчитывает сразу, без кнопки', r.join() === mg.join() && adj === '+187 ккал', r.join('/') + ', поправка ' + adj);
+  await page.reload();
+  r = await readResult(page);
+  check('v2', 'данные запоминаются: после перезагрузки форма и результат на месте',
+    (await page.inputValue('#weight')) === '58' && (await page.isVisible('#result')) && r.join() === mg.join() &&
+    await page.isChecked('input[name=goal][value=gain]'), r.join('/'));
+  await page.click('#r-copy');
+  await page.waitForSelector('#toast.show');
+  check('v2', 'кнопка «Скопировать» срабатывает', /скопирован/i.test(await page.textContent('#toast')), await page.textContent('#toast'));
+  await page.goto(url('index.html'));
+  check('v2', 'на главной видна последняя норма', (await page.isVisible('#lastcalc')) && (await page.textContent('#lc-kcal')) === String(mg[0]), await page.textContent('#lc-kcal'));
+  await page.goto(url('calculator.html'));
+  await page.click('#r-forget');
+  await page.reload();
+  check('v2', '«Забыть мои данные» стирает всё', !(await page.isVisible('#result')) && (await page.inputValue('#age')) === '' &&
+    (await page.evaluate(() => localStorage.getItem('profit-calc'))) === null);
+  await page.uncheck('#remember');
+  await fill(page, { sex: 'm', age: '30', height: '175', weight: '70', activity: '1.2', goal: 'keep' });
+  check('v2', 'без галочки «Запомнить» ничего не сохраняется', (await page.evaluate(() => localStorage.getItem('profit-calc'))) === null && await page.isVisible('#result'));
+  await page.check('#remember');
+  await fill(page, { sex: 'f', age: '19', height: '165', weight: '58', activity: '1.375', goal: 'keep' });
+
+  // замены: группы, сортировка, ссылка с поиском, сброс
+  await page.goto(url('swaps.html'));
+  await page.click('#swap-cats label:has-text("Напитки")');
+  const drinks = await page.$$eval('#swaps-body tr', (t) => t.map((x) => x.innerText));
+  check('v2', 'замены: фильтр по группе «Напитки»', drinks.length === 2 && drinks.every((x) => /Кола|Энергетик/.test(x)), drinks.length + ' строки');
+  await page.click('#swap-cats label:has-text("Все")');
+  await page.selectOption('#swap-sort', 'save');
+  const diffs = await page.$$eval('#swaps-body .diff', (t) => t.map((x) => +x.textContent.replace('−', '-').replace(/[^\d-]/g, '')));
+  check('v2', 'замены: сортировка по экономии калорий', diffs.length === 27 && diffs.every((d, i) => i === 0 || diffs[i - 1] <= d), 'первая ' + diffs[0] + ', последняя ' + diffs[diffs.length - 1]);
+  const bjuShown = await page.$$eval('#swaps-body tr:first-child .bju', (t) => t.length);
+  check('v2', 'у замен показаны Б/Ж/У из справочника', bjuShown === 2);
+  await page.fill('#swap-search', 'абракадабра');
+  await page.click('#swap-reset');
+  check('v2', 'кнопка «сбрось фильтры» возвращает все 27', (await page.$$eval('#swaps-body tr', (t) => t.length)) === 27 && (await page.inputValue('#swap-search')) === '');
+  await page.goto(url('swaps.html') + '#' + encodeURIComponent('майонез'));
+  const hashRows = await page.$$eval('#swaps-body tr', (t) => t.length);
+  check('v2', 'ссылка swaps.html#майонез сразу ищет', hashRows === 1, hashRows + '');
+
+  // справочник: сортировка и тарелка дня
+  await page.goto(url('products.html'));
+  await page.click('th[data-key="kcal"] button');
+  const top = await page.$$eval('#prod-body tr td.num:nth-child(2)', (t) => t.map((x) => +x.textContent));
+  const sortOk = top.every((v, i) => i === 0 || top[i - 1] >= v);
+  const ariaSort = await page.getAttribute('th[data-key="kcal"]', 'aria-sort');
+  check('v2', 'справочник: сортировка по калориям по убыванию', sortOk && ariaSort === 'descending', 'первая ' + top[0]);
+  await page.click('th[data-key="name"] button');
+  const firstName = await page.textContent('#prod-body tr:first-child td:first-child');
+  check('v2', 'справочник: сортировка по алфавиту', /^Апельсин/.test(firstName), firstName.slice(0, 20));
+  await page.click('th[data-key="name"] button');
+  await page.click('th[data-key="name"] button');
+  await page.fill('#prod-search', 'гречка');
+  await page.click('#prod-body tr:first-child .add-btn');
+  await page.fill('#prod-search', 'яйцо');
+  await page.click('#prod-body tr:first-child .add-btn');
+  await page.fill('#plate-list li:nth-child(2) input', '120');
+  const pl = await page.evaluate(() => ['pl-kcal', 'pl-p', 'pl-f', 'pl-c'].map((id) => document.getElementById(id).textContent));
+  // гречка 100 г: 346/11,7/2,7/75,0; яйцо 120 г: 143/12,6/9,5/0,7 на 100 г
+  const ek = Math.round(346 + 143 * 1.2), ep = (11.7 + 12.6 * 1.2).toFixed(1).replace('.', ',');
+  check('v2', 'тарелка дня складывает КБЖУ с учётом граммов', pl[0] === String(ek) && pl[1] === ep + ' г', pl.join(' / ') + ', ждали ' + ek + ' и ' + ep);
+  const normTxt = await page.textContent('#pl-norm');
+  check('v2', 'тарелка показывает долю от сохранённой нормы', normTxt.includes('от твоей нормы 1863 ккал'), normTxt.slice(0, 40));
+  await page.reload();
+  const plN = await page.$$eval('#plate-list li', (t) => t.length);
+  check('v2', 'тарелка сохраняется после перезагрузки', plN === 2 && (await page.textContent('#pl-kcal')) === String(ek));
+  await page.click('#pl-clear');
+  check('v2', 'тарелку можно очистить', (await page.$$eval('#plate-list li', (t) => t.length)) === 0 && (await page.textContent('#pl-kcal')) === '0');
+
+  // советы: отметки и случайный совет
+  await page.goto(url('tips.html'));
+  await page.click('#tip-2 .tried');
+  await page.reload();
+  check('v2', 'советы: отметка «уже пробую» сохраняется', (await page.isChecked('#tip-2 input')) && (await page.textContent('#tip-progress')).includes('1 из 13'), await page.textContent('#tip-progress'));
+  await page.click('#tip-random');
+  check('v2', 'кнопка «случайный совет» подсвечивает стикер', (await page.$$eval('.tip.flash', (t) => t.length)) === 1);
+  await page.click('#tip-reset');
+  check('v2', 'отметки можно снять', (await page.textContent('#tip-progress')).includes('0 из 13'));
+
+  // тема
+  await page.click('.theme-btn');
+  const dark1 = await page.getAttribute('html', 'data-theme');
+  await page.goto(url('swaps.html'));
+  const dark2 = await page.getAttribute('html', 'data-theme');
+  const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+  await page.click('.theme-btn');
+  check('v2', 'ночная тема включается и запоминается', dark1 === 'dark' && dark2 === 'dark' && bg === 'rgb(21, 24, 20)' && !(await page.getAttribute('html', 'data-theme')), [dark1, dark2, bg].join(' '));
+
+  // чек на главной листается вперёд и назад
+  await page.goto(url('index.html'));
+  const n0 = await page.textContent('#rc-num');
+  await page.click('#rc-next');
+  await page.waitForTimeout(250);
+  const n1 = await page.textContent('#rc-num');
+  await page.click('#rc-prev');
+  await page.waitForTimeout(250);
+  const n2 = await page.textContent('#rc-num');
+  check('v2', 'чек замены на главной листается кнопками', n0 === '1 из 27' && n1 === '2 из 27' && n2 === '1 из 27', [n0, n1, n2].join(' → '));
+  const facts = await page.$$eval('[data-count]', (t) => t.map((x) => x.textContent).join(','));
+  check('v2', 'цифры на главной совпадают с данными', facts === '93,27,21,13', facts);
+
+  // «стереть всё» на странице о команде
+  await page.goto(url('about.html'));
+  await page.click('#wipe-all');
+  const left = await page.evaluate(() => ['profit-calc', 'profit-plate', 'profit-tips', 'profit-theme'].filter((k) => localStorage.getItem(k) !== null));
+  check('v2', '«Стереть всё» убирает все данные сайта из браузера', left.length === 0, left.join(','));
+
+  // доступность и мета-теги на всех страницах
+  const a11y = [];
+  for (const p of pages) {
+    await page.goto(url(p));
+    const info = await page.evaluate(() => ({
+      lang: document.documentElement.lang,
+      h1: document.querySelectorAll('h1').length,
+      noAlt: [...document.images].filter((i) => !i.hasAttribute('alt')).length,
+      unlabeled: [...document.querySelectorAll('input, select, textarea')].filter((e) => !(e.labels && e.labels.length) && !e.getAttribute('aria-label') && !e.getAttribute('aria-labelledby')).length,
+      og: !!document.querySelector('meta[property="og:image"]') && !!document.querySelector('meta[name="description"]') && !!document.querySelector('link[rel="canonical"]'),
+      title: document.title.length > 5
+    }));
+    if (info.lang !== 'ru' || info.h1 !== 1 || info.noAlt || info.unlabeled || !info.og || !info.title) a11y.push(p + ' ' + JSON.stringify(info));
+  }
+  check('доступн.', 'lang, один h1, alt у картинок, подписи у полей, мета-теги OG', a11y.length === 0, a11y.join(' | '));
+  await page.goto(url('calculator.html'));
+  await page.keyboard.press('Tab');
+  const firstFocus = await page.evaluate(() => document.activeElement.className + ' ' + getComputedStyle(document.activeElement).outlineStyle);
+  check('доступн.', 'первый Tab попадает на ссылку «К содержимому», фокус видно', /skip/.test(firstFocus) && !/none/.test(firstFocus), firstFocus);
+  check('доступн.', 'картинка для соцсетей на месте', fs.existsSync(path.join(ROOT, 'img/og.png')));
+
+  // при «уменьшить движение» всё видно сразу
+  const calm = await browser.newContext({ viewport: { width: 1280, height: 800 }, reducedMotion: 'reduce' });
+  const cp = await calm.newPage();
+  await cp.goto(url('index.html'));
+  const hidden = await cp.$$eval('.reveal', (t) => t.filter((x) => getComputedStyle(x).opacity !== '1').length);
+  check('доступн.', 'prefers-reduced-motion: блоки видны сразу, без анимации', hidden === 0, hidden + ' скрытых');
+  await calm.close();
 
   // вёрстка: нет прокрутки вбок, кнопки не меньше 48 px на телефоне, бургер
   const mobile = await browser.newContext({ viewport: { width: 360, height: 740 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
@@ -213,6 +368,7 @@ async function readResult(page) {
   mp.on('pageerror', (e) => consoleErrors.push(mp.url() + ': ' + e.message));
   mp.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(mp.url() + ': ' + m.text()); });
   for (const [ctxName, pg, w] of [['ПК', page, 1280], ['телефон', mp, 360]]) {
+    await pg.evaluate(() => localStorage.clear()).catch(() => {});
     const wide = [];
     for (const p of pages) {
       await pg.goto(url(p));
@@ -226,7 +382,7 @@ async function readResult(page) {
     check('вёрстка', 'нет прокрутки вбок на ' + w + ' px', wide.length === 0, wide.join(', '));
   }
   await mp.goto(url('calculator.html'));
-  const small = await mp.$$eval('.btn, .field input:not([type=radio]), .field select, .sex label, .burger', (els) =>
+  const small = await mp.$$eval('.btn, .field input:not([type=radio]), .field select, .sex label, .goal label, .burger', (els) =>
     els.filter((e) => e.offsetParent && e.getBoundingClientRect().height < 42).map((e) => e.className + ' ' + e.getBoundingClientRect().height));
   check('вёрстка', 'элементы управления на телефоне не ниже 42-48 px', small.length === 0, small.join(', '));
   const fontSize = await mp.$eval('#age', (e) => getComputedStyle(e).fontSize);
@@ -241,6 +397,7 @@ async function readResult(page) {
   check('вёрстка', 'бургер открывается, пункт меню работает, кнопка КБЖУ видна в шапке', navHidden && navOpen && headBtn && mp.url().endsWith('tips.html'));
 
   check('консоль', 'нет ошибок в консоли', consoleErrors.length === 0, consoleErrors.join(' | '));
+  check('приватность', 'нет запросов на чужие сайты (счётчиков, шрифтов, CDN)', outside.length === 0, outside.slice(0, 3).join(', '));
 
   await browser.close();
   const ok = results.filter((x) => x.ok).length;

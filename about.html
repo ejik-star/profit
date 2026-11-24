@@ -3,21 +3,31 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>О команде проекта PROfit, ГУАП</title>
-  <meta name="description" content="Кто сделал PROfit: студенты ГУАП, проект по дисциплине «Основы проектной деятельности».">
-  <meta property="og:title" content="О команде проекта PROfit, ГУАП">
-  <meta property="og:description" content="Кто сделал PROfit: студенты ГУАП, проект по дисциплине «Основы проектной деятельности».">
+  <title>О команде PROfit | учебный проект ГУАП</title>
+  <meta name="description" content="Кто сделал PROfit: студенты ГУАП, группа 4528. Контакты, опрос и что сайт хранит в браузере.">
+  <meta name="theme-color" content="#f7f2e6">
+  <link rel="canonical" href="https://ejik-star.github.io/profit/about.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="PROfit">
+  <meta property="og:title" content="О команде PROfit | учебный проект ГУАП">
+  <meta property="og:description" content="Кто сделал PROfit: студенты ГУАП, группа 4528. Контакты, опрос и что сайт хранит в браузере.">
+  <meta property="og:url" content="https://ejik-star.github.io/profit/about.html">
+  <meta property="og:image" content="https://ejik-star.github.io/profit/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="32x32">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/redesign.css">
+  <script>try{var t=localStorage.getItem('profit-theme');if(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)t='dark';if(t==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
+  <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
 <a class="skip" href="#main">К содержимому</a>
 <header class="header">
   <div class="wrap">
-    <a class="logo" href="index.html"><img src="img/logo.svg" alt=""><span>PRO<b>fit</b></span></a>
+    <a class="logo" href="index.html" aria-label="PROfit, на главную"><img src="img/logo.svg" alt="" width="34" height="34"><span>PRO<b>fit</b></span></a>
     <nav class="nav" id="nav" aria-label="Меню">
       <ul>
         <li><a href="index.html">Главная</a></li>
@@ -26,6 +36,7 @@
         <li><a href="tips.html">Советы</a></li>
         <li><a href="products.html">Продукты</a></li>
         <li><a href="about.html" class="active" aria-current="page">О команде</a></li>
+        <li><button class="theme-btn" type="button" aria-pressed="false" title="Переключить тему"><span class="t-dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg></span><span class="t-light"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span><span class="theme-label">Ночь</span></button></li>
       </ul>
     </nav>
     <a class="btn btn-head" href="calculator.html">Посчитать КБЖУ</a>
@@ -35,6 +46,7 @@
 <main id="main">
 <section class="page-head">
   <div class="wrap">
+    <img class="doodle" src="img/bottle.svg" alt="" aria-hidden="true">
     <h1>Кто сделал PROfit</h1>
     <p class="lead">Мы студенты ГУАП, группа 4528. Сайт сделан в рамках проектной деятельности. Хотели сделать то, чем сами бы пользовались.</p>
   </div>
@@ -69,17 +81,32 @@
 <section class="section" style="padding-top:0">
   <div class="wrap">
     <div class="box">
+      <span class="tape" aria-hidden="true"></span>
       <h2>Связаться с нами</h2>
       <!-- ВПИСАТЬ: почту или Telegram команды вместо плашки ниже -->
       <p>Нашли ошибку или есть идея? Напишите нам: <span class="todo">контакт команды пока не указан</span></p>
       <p>Помоги нам, пройди <a href="https://forms.yandex.ru/u/6af5b84f974ab24c5ae6c026" target="_blank" rel="noopener">короткий опрос о питании</a>. Он анонимный и займёт около трёх минут.</p>
-      <p class="small">Проект по дисциплине «Основы проектной деятельности», <a href="https://guap.ru/" target="_blank" rel="noopener">ГУАП</a>, Санкт-Петербург.</p>
+      <p class="small">Проект по дисциплине «Основы проектной деятельности», <a href="https://guap.ru/" target="_blank" rel="noopener">ГУАП</a>, Санкт-Петербург. Код сайта открыт на <a href="https://github.com/ejik-star/profit" target="_blank" rel="noopener">GitHub</a>.</p>
     </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="wrap how">
+    <h2>Что сайт хранит у тебя</h2>
+    <ul class="notebook-list">
+      <li>Данные калькулятора, если стоит галочка «Запомнить». Нужны, чтобы не вводить их заново.</li>
+      <li>Тарелку дня из справочника продуктов.</li>
+      <li>Отметки «уже пробую» на советах и выбранную тему, дневную или ночную.</li>
+    </ul>
+    <p style="margin-top:12px">Всё это лежит только в памяти браузера на твоём устройстве. Счётчиков, рекламы и сторонних скриптов на сайте нет, шрифты тоже лежат у нас.</p>
+    <p><button class="btn btn-ghost btn-small" type="button" id="wipe-all">Стереть всё, что сайт запомнил</button></p>
   </div>
 </section>
 </main>
 <footer class="footer">
   <div class="wrap">
+    <a class="up" href="#main">наверх ↑</a>
     <ul>
       <li><a href="calculator.html">Калькулятор КБЖУ</a></li>
       <li><a href="swaps.html">Таблица замен</a></li>
@@ -88,9 +115,10 @@
       <li><a href="about.html">О команде</a></li>
     </ul>
     <p>PROfit, учебный проект ОПД ГУАП, 2026. Информация на сайте не заменяет консультацию врача.</p>
-    <p>КБЖУ продуктов взяты из открытой базы USDA FoodData Central (SR Legacy). Введённые в калькулятор данные никуда не отправляются.</p>
+    <p>КБЖУ продуктов взяты из открытой базы USDA FoodData Central (SR Legacy). Введённые данные никуда не отправляются, они остаются только в твоём браузере.</p>
   </div>
 </footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="js/main.js"></script>
 </body>
 </html>
